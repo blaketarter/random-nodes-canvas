@@ -20,5 +20,5 @@ export default function initOpts({
     endSizeX,
     endSizeY,
     blocks,
-  }
-};
+  };
+}

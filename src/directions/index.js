@@ -24,8 +24,6 @@ export const DIR_LIST = [
 ];
 
 export const getRandomDirection = (node) => {
-  const dirsMinusExcludes = DIR_LIST.filter((dir) => {
-    return node.dirExcludes.indexOf(dir) < 0;
-  });
+  const dirsMinusExcludes = DIR_LIST.filter(dir => node.dirExcludes.indexOf(dir) < 0);
   return randomInArr(dirsMinusExcludes);
-}
+};

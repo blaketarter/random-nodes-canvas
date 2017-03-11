@@ -30,46 +30,46 @@ const changeDirCountdown = 120;
 export const moveNodeUpBy = (node) => {
   node.coords[1] = clamp(node.coords[1] - moveBy, node.minY, node.maxY);
   return node;
-}
+};
 
 export const moveNodeDownBy = (node) => {
   node.coords[1] = clamp(node.coords[1] + moveBy, node.minY, node.maxY);
   return node;
-}
+};
 
 export const moveNodeRightBy = (node) => {
   node.coords[0] = clamp(node.coords[0] + moveBy, node.minX, node.maxX);
   return node;
-}
+};
 
 export const moveNodeLeftBy = (node) => {
   node.coords[0] = clamp(node.coords[0] - moveBy, node.minX, node.maxX);
   return node;
-}
+};
 
 export const moveNodeUpLeft = (node) => {
   node = moveNodeUpBy(node);
   node = moveNodeLeftBy(node);
   return node;
-}
+};
 
 export const moveNodeUpRight = (node) => {
   node = moveNodeUpBy(node);
   node = moveNodeRightBy(node);
   return node;
-}
+};
 
 export const moveNodeDownLeft = (node) => {
   node = moveNodeDownBy(node);
   node = moveNodeLeftBy(node);
   return node;
-}
+};
 
 export const moveNodeDownRight = (node) => {
   node = moveNodeDownBy(node);
   node = moveNodeRightBy(node);
   return node;
-}
+};
 
 const moveNodeDirSwitch = (node, dir) => {
   switch (dir) {
@@ -113,31 +113,31 @@ const moveNodeDirSwitch = (node, dir) => {
 export const moveDirectionRandomlyBy = (node) => {
   if (node.shouldChangeDir || node.changeDirCountdown <= 0 || !node.dir) {
     let dir;
-    
+
     if (node.shouldChangeDir) {
       dir = getRandomDirection(node);
       node.shouldChangeDir = false;
     } else {
       dir = getRandomDirection(node);
     }
-    
+
     node.changeDirCountdown = changeDirCountdown;
-    
+
     node = moveNodeDirSwitch(node, dir);
   } else {
     node = moveNodeDirSwitch(node, node.dir);
     node.changeDirCountdown -= 1;
     node.shouldChangeDir = checkIfNodeShouldChangeDir(node);
-    
+
     if (node.shouldChangeDir) {
       node.dirExcludes = getDirExcludes(node);
     } else {
       node.dirExcludes = [];
     }
   }
-  
+
   return node;
-}
+};
 
 export const moveTowardsMouse = (node, mouse) => {
   if (node.coords[0] > mouse.x) {
@@ -145,22 +145,19 @@ export const moveTowardsMouse = (node, mouse) => {
   } else if (node.coords[0] < mouse.x) {
     node = moveNodeRightBy(node);
   }
-  
+
   if (node.coords[1] > mouse.y) {
     node = moveNodeUpBy(node);
   } else if (node.coords[1] < mouse.y) {
     node = moveNodeDownBy(node);
   }
-  
-  return node;
-}
 
-export const moveNodes = (nodes) => {
-  return nodes.map((node, index) => {
-    if (node.highlightLevel === 0) {
-      return moveDirectionRandomlyBy(node);
-    } else {
-      return moveTowardsMouse(node, getMouseCoords(), moveBy * 2);
-    }
-  });
+  return node;
 };
+
+export const moveNodes = nodes => nodes.map((node, index) => {
+  if (node.highlightLevel === 0) {
+    return moveDirectionRandomlyBy(node);
+  }
+  return moveTowardsMouse(node, getMouseCoords(), moveBy * 2);
+});

@@ -63,35 +63,34 @@ const opts = initOpts({
 });
 let shouldRender = true;
 
-let stats = new Stats();
+const stats = new Stats();
 stats.showPanel(0);
 
 function startRender() {
   document.onmousemove = setMouseCoords;
   const canvas = document.getElementById('graph');
   const ctx = canvas.getContext('2d');
-  
+
   document.body.appendChild(stats.dom);
-  
-  canvas.width  = window.innerWidth;
+
+  canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  
+
   let nodes = generateNodes(opts);
   nodes = connectNodes(nodes, opts);
-  
+
   render(canvas, ctx, nodes);
-  
-  setTimeout(function() {
+
+  setTimeout(() => {
     shouldRender = false;
   }, 30000);
 }
 
 function render(canvas, ctx, nodes) {
-  
   stats.begin();
   draw(canvas, ctx, nodes, opts);
   stats.end();
-  
+
   if (shouldRender) {
     const newNodes = moveNodes(nodes);
     window.requestAnimationFrame(() => render(canvas, ctx, newNodes));

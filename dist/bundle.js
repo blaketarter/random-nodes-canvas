@@ -330,9 +330,8 @@ var moveNodes = function moveNodes(nodes) {
   return nodes.map(function (node, index) {
     if (node.highlightLevel === 0) {
       return moveDirectionRandomlyBy(node);
-    } else {
-      return moveTowardsMouse(node, getMouseCoords(), moveBy * 2);
     }
+    return moveTowardsMouse(node, getMouseCoords(), moveBy * 2);
   });
 };
 
@@ -431,7 +430,6 @@ function startRender() {
 }
 
 function render(canvas, ctx, nodes) {
-
   stats.begin();
   draw(canvas, ctx, nodes, opts);
   stats.end();
