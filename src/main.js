@@ -7,12 +7,12 @@ import {
   clamp,
   randomInArr,
   getRandomBetween,
-} from './utils/index.js';
+} from './utils/index';
 
 import {
   getMouseCoords,
   setMouseCoords,
-} from './mouse/index.js';
+} from './mouse/index';
 
 import {
   UP,
@@ -25,14 +25,14 @@ import {
   DOWN_RIGHT,
   DIR_LIST,
   getRandomDirection,
-} from './directions/index.js';
+} from './directions/index';
 
-import initOpts from './opts/index.js';
+import initOpts from './opts/index';
 import generateNodes, {
   connectNodes,
   checkIfNodeShouldChangeDir,
   getDirExcludes,
-} from './node/index.js';
+} from './node/index';
 
 import {
   moveNodeUpBy,
@@ -46,7 +46,7 @@ import {
   moveDirectionRandomlyBy,
   moveTowardsMouse,
   moveNodes,
-} from './move/index.js';
+} from './move/index';
 
 import {
   drawNode,
@@ -55,7 +55,7 @@ import {
   drawConnections,
   getHighlightedNode,
   draw,
-} from './draw/index.js';
+} from './draw/index';
 
 const opts = initOpts({
   height: window.innerHeight,

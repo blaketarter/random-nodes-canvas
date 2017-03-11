@@ -57,8 +57,8 @@ function initOpts(_ref) {
       height = _ref.height;
 
   var spacing = 50;
-  var maxX = window.innerWidth;
-  var maxY = window.innerHeight;
+  var maxX = width;
+  var maxY = height;
   var xBlocks = Math.max(1, Math.ceil(maxX / spacing));
   var yBlocks = Math.max(1, Math.ceil(maxY / spacing));
   var endSizeX = maxX - (xBlocks - 1) * spacing;

@@ -8,11 +8,11 @@ import {
   DOWN_LEFT,
   DOWN_RIGHT,
   DIR_LIST,
-} from '../directions/index.js';
+} from '../directions/index';
 
 import {
   getRandomBetween,
-} from '../utils/index.js';
+} from '../utils/index';
 
 class Node {
   constructor(opts) {

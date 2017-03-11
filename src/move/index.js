@@ -1,6 +1,6 @@
 import {
   clamp,
-} from '../utils/index.js';
+} from '../utils/index';
 
 import {
   UP,
@@ -13,16 +13,16 @@ import {
   DOWN_RIGHT,
   DIR_LIST,
   getRandomDirection,
-} from '../directions/index.js';
+} from '../directions/index';
 
 import {
   getMouseCoords,
-} from '../mouse/index.js';
+} from '../mouse/index';
 
 import {
   checkIfNodeShouldChangeDir,
   getDirExcludes,
-} from '../node/index.js';
+} from '../node/index';
 
 const moveBy = 0.05;
 const changeDirCountdown = 120;

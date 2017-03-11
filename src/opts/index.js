@@ -3,8 +3,8 @@ export default function initOpts({
   height,
 }) {
   const spacing = 50;
-  const maxX = window.innerWidth;
-  const maxY = window.innerHeight;
+  const maxX = width;
+  const maxY = height;
   const xBlocks = Math.max(1, Math.ceil(maxX / spacing));
   const yBlocks = Math.max(1, Math.ceil(maxY / spacing));
   const endSizeX = maxX - ((xBlocks - 1) * spacing);
