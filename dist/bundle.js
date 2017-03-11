@@ -145,9 +145,28 @@ var connectNodes = function connectNodes(nodes, opts) {
   return nodes;
 };
 
+var checkIfNodeShouldChangeDir = function checkIfNodeShouldChangeDir(node) {
+  if (node.coords[0] === node.minX || node.coords[0] === node.maxX) {
+    return true;
+  } else if (node.coords[1] === node.minY || node.coords[1] === node.maxY) {
+    return true;
+  }
+  return false;
+};
 
+var getDirExcludes = function getDirExcludes(node) {
+  if (node.coords[0] === node.minX) {
+    return [LEFT, UP, DOWN, UP_LEFT, DOWN_LEFT];
+  } else if (node.coords[0] === node.maxX) {
+    return [RIGHT, UP, DOWN, UP_RIGHT, DOWN_RIGHT];
+  } else if (node.coords[1] === node.minY) {
+    return [LEFT, UP, RIGHT, UP_LEFT, UP_RIGHT];
+  } else if (node.coords[1] === node.maxY) {
+    return [LEFT, DOWN, RIGHT, DOWN_LEFT, DOWN_RIGHT];
+  }
 
-
+  return [];
+};
 
 function generateNodes(opts) {
   var nodes = [];
@@ -224,7 +243,7 @@ var moveNodeDownRight = function moveNodeDownRight(node) {
 };
 
 var moveNodeDirSwitch = function moveNodeDirSwitch(node, dir) {
-  switch (node.dir) {
+  switch (dir) {
     case UP:
       node.setDir(UP);
       node = moveNodeUpBy(node);
@@ -264,20 +283,20 @@ var moveNodeDirSwitch = function moveNodeDirSwitch(node, dir) {
 
 var moveDirectionRandomlyBy = function moveDirectionRandomlyBy(node) {
   if (node.shouldChangeDir || node.changeDirCountdown <= 0 || !node.dir) {
-    var _dir = void 0;
+    var dir = void 0;
 
     if (node.shouldChangeDir) {
-      _dir = getRandomDirection(node);
+      dir = getRandomDirection(node);
       node.shouldChangeDir = false;
     } else {
-      _dir = getRandomDirection(node);
+      dir = getRandomDirection(node);
     }
 
     node.changeDirCountdown = changeDirCountdown;
 
-    node = moveNodeDirSwitch(node, _dir);
-  } else {
     node = moveNodeDirSwitch(node, dir);
+  } else {
+    node = moveNodeDirSwitch(node, node.dir);
     node.changeDirCountdown -= 1;
     node.shouldChangeDir = checkIfNodeShouldChangeDir(node);
 
@@ -378,17 +397,14 @@ var draw = function draw(canvas, ctx, nodes, opts) {
 };
 
 // todo
-// fix every node getting stuck on minX (left)
 // make everything non mutating (as much as possible)
 // pure funtions
-// break out
 // optimize
 
 var opts = initOpts({
   height: window.innerHeight,
   width: window.innerWidth
 });
-
 var shouldRender = true;
 
 var stats = new Stats();

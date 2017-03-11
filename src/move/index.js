@@ -19,6 +19,11 @@ import {
   getMouseCoords,
 } from '../mouse/index.js';
 
+import {
+  checkIfNodeShouldChangeDir,
+  getDirExcludes,
+} from '../node/index.js';
+
 const moveBy = 0.05;
 const changeDirCountdown = 120;
 
@@ -67,7 +72,7 @@ export const moveNodeDownRight = (node) => {
 }
 
 const moveNodeDirSwitch = (node, dir) => {
-  switch (node.dir) {
+  switch (dir) {
     case UP:
       node.setDir(UP);
       node = moveNodeUpBy(node);
@@ -120,7 +125,7 @@ export const moveDirectionRandomlyBy = (node) => {
     
     node = moveNodeDirSwitch(node, dir);
   } else {
-    node = moveNodeDirSwitch(node, dir);
+    node = moveNodeDirSwitch(node, node.dir);
     node.changeDirCountdown -= 1;
     node.shouldChangeDir = checkIfNodeShouldChangeDir(node);
     
