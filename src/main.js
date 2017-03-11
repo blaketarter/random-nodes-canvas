@@ -1,8 +1,6 @@
 // todo
-// fix every node getting stuck on minX (left)
 // make everything non mutating (as much as possible)
 // pure funtions
-// break out
 // optimize
 
 import {
