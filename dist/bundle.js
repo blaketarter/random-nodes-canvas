@@ -400,46 +400,39 @@ var draw = function draw(canvas, ctx, nodes, opts) {
 // pure funtions
 // optimize
 
-var opts = initOpts({
-  height: window.innerHeight,
-  width: window.innerWidth
-});
-var shouldRender = true;
-
-var stats = new Stats();
-stats.showPanel(0);
-
 function startRender() {
+  var opts = initOpts({
+    height: window.innerHeight,
+    width: window.innerWidth
+  });
+
+  var stats = new Stats();
+  stats.showPanel(0);
+
   document.onmousemove = setMouseCoords;
   var canvas = document.getElementById('graph');
   var ctx = canvas.getContext('2d');
 
   document.body.appendChild(stats.dom);
 
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  canvas.width = opts.maxX;
+  canvas.height = opts.maxY;
 
   var nodes = generateNodes(opts);
   nodes = connectNodes(nodes, opts);
 
-  render(canvas, ctx, nodes);
-
-  setTimeout(function () {
-    shouldRender = false;
-  }, 30000);
+  render(canvas, ctx, nodes, opts, stats);
 }
 
-function render(canvas, ctx, nodes) {
+function render(canvas, ctx, nodes, opts, stats) {
   stats.begin();
   draw(canvas, ctx, nodes, opts);
   stats.end();
 
-  if (shouldRender) {
-    var newNodes = moveNodes(nodes);
-    window.requestAnimationFrame(function () {
-      return render(canvas, ctx, newNodes);
-    });
-  }
+  var newNodes = moveNodes(nodes);
+  window.requestAnimationFrame(function () {
+    return render(canvas, ctx, newNodes, opts, stats);
+  });
 }
 
 window.onload = startRender;

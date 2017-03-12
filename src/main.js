@@ -57,44 +57,37 @@ import {
   draw,
 } from './draw/index';
 
-const opts = initOpts({
-  height: window.innerHeight,
-  width: window.innerWidth,
-});
-let shouldRender = true;
-
-const stats = new Stats();
-stats.showPanel(0);
-
 function startRender() {
+  const opts = initOpts({
+    height: window.innerHeight,
+    width: window.innerWidth,
+  });
+
+  const stats = new Stats();
+  stats.showPanel(0);
+  
   document.onmousemove = setMouseCoords;
   const canvas = document.getElementById('graph');
   const ctx = canvas.getContext('2d');
 
   document.body.appendChild(stats.dom);
 
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  canvas.width = opts.maxX;
+  canvas.height = opts.maxY;
 
   let nodes = generateNodes(opts);
   nodes = connectNodes(nodes, opts);
 
-  render(canvas, ctx, nodes);
-
-  setTimeout(() => {
-    shouldRender = false;
-  }, 30000);
+  render(canvas, ctx, nodes, opts, stats);
 }
 
-function render(canvas, ctx, nodes) {
+function render(canvas, ctx, nodes, opts, stats) {
   stats.begin();
   draw(canvas, ctx, nodes, opts);
   stats.end();
 
-  if (shouldRender) {
-    const newNodes = moveNodes(nodes);
-    window.requestAnimationFrame(() => render(canvas, ctx, newNodes));
-  }
+  const newNodes = moveNodes(nodes);
+  window.requestAnimationFrame(() => render(canvas, ctx, newNodes, opts, stats));
 }
 
 window.onload = startRender;
