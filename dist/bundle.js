@@ -85,7 +85,8 @@ var Node = function () {
   function Node(opts) {
     _classCallCheck(this, Node);
 
-    this.coords = [opts.x, opts.y];
+    this.x = opts.x;
+    this.y = opts.y;
     this.row = opts.row;
     this.col = opts.col;
     this.siblings = [];
@@ -119,6 +120,16 @@ var Node = function () {
     value: function setHighlightLevel(newLevel) {
       this.highlightLevel = newLevel;
     }
+  }, {
+    key: 'setX',
+    value: function setX(newX) {
+      this.x = newX;
+    }
+  }, {
+    key: 'setY',
+    value: function setY(newY) {
+      this.y = newY;
+    }
   }]);
 
   return Node;
@@ -151,22 +162,22 @@ var connectNodes = function connectNodes(nodes, opts) {
 };
 
 var checkIfNodeShouldChangeDir = function checkIfNodeShouldChangeDir(node) {
-  if (node.coords[0] === node.minX || node.coords[0] === node.maxX) {
+  if (node.x === node.minX || node.x === node.maxX) {
     return true;
-  } else if (node.coords[1] === node.minY || node.coords[1] === node.maxY) {
+  } else if (node.y === node.minY || node.y === node.maxY) {
     return true;
   }
   return false;
 };
 
 var getDirExcludes = function getDirExcludes(node) {
-  if (node.coords[0] === node.minX) {
+  if (node.x === node.minX) {
     return [LEFT, UP, DOWN, UP_LEFT, DOWN_LEFT];
-  } else if (node.coords[0] === node.maxX) {
+  } else if (node.x === node.maxX) {
     return [RIGHT, UP, DOWN, UP_RIGHT, DOWN_RIGHT];
-  } else if (node.coords[1] === node.minY) {
+  } else if (node.y === node.minY) {
     return [LEFT, UP, RIGHT, UP_LEFT, UP_RIGHT];
-  } else if (node.coords[1] === node.maxY) {
+  } else if (node.y === node.maxY) {
     return [LEFT, DOWN, RIGHT, DOWN_LEFT, DOWN_RIGHT];
   }
 
@@ -204,22 +215,22 @@ var moveBy = 0.05;
 var changeDirCountdown = 120;
 
 var moveNodeUpBy = function moveNodeUpBy(node) {
-  node.coords[1] = clamp(node.coords[1] - moveBy, node.minY, node.maxY);
+  node.setY(clamp(node.y - moveBy, node.minY, node.maxY));
   return node;
 };
 
 var moveNodeDownBy = function moveNodeDownBy(node) {
-  node.coords[1] = clamp(node.coords[1] + moveBy, node.minY, node.maxY);
+  node.setY(clamp(node.y + moveBy, node.minY, node.maxY));
   return node;
 };
 
 var moveNodeRightBy = function moveNodeRightBy(node) {
-  node.coords[0] = clamp(node.coords[0] + moveBy, node.minX, node.maxX);
+  node.setX(clamp(node.x + moveBy, node.minX, node.maxX));
   return node;
 };
 
 var moveNodeLeftBy = function moveNodeLeftBy(node) {
-  node.coords[0] = clamp(node.coords[0] - moveBy, node.minX, node.maxX);
+  node.setX(clamp(node.x - moveBy, node.minX, node.maxX));
   return node;
 };
 
@@ -318,15 +329,15 @@ var moveDirectionRandomlyBy = function moveDirectionRandomlyBy(node) {
 };
 
 var moveTowardsMouse = function moveTowardsMouse(node, mouse) {
-  if (node.coords[0] > mouse.x) {
+  if (node.x > mouse.x) {
     node = moveNodeLeftBy(node);
-  } else if (node.coords[0] < mouse.x) {
+  } else if (node.x < mouse.x) {
     node = moveNodeRightBy(node);
   }
 
-  if (node.coords[1] > mouse.y) {
+  if (node.y > mouse.y) {
     node = moveNodeUpBy(node);
-  } else if (node.coords[1] < mouse.y) {
+  } else if (node.y < mouse.y) {
     node = moveNodeDownBy(node);
   }
 
@@ -351,16 +362,16 @@ var lineStyle = {
 
 var drawNode = function drawNode(node, ctx) {
   ctx.fillStyle = dotStyle;
-  ctx.fillRect(node.coords[0], node.coords[1], 1, 1);
+  ctx.fillRect(node.x, node.y, 1, 1);
 };
 
 
 
-var drawLine = function drawLine(from, to, ctx, highlightLevel) {
+var drawLine = function drawLine(fromNode, toNode, ctx, highlightLevel) {
   ctx.strokeStyle = lineStyle[highlightLevel];
   ctx.beginPath();
-  ctx.moveTo(from.coords[0], from.coords[1]);
-  ctx.lineTo(to.coords[0], to.coords[1]);
+  ctx.moveTo(fromNode.x, fromNode.y);
+  ctx.lineTo(toNode.x, toNode.y);
   ctx.closePath();
   ctx.stroke();
 };

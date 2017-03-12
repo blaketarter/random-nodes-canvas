@@ -13,8 +13,8 @@ const lineStyle = {
 export const drawNode = (node, ctx) => {
   ctx.fillStyle = dotStyle;
   ctx.fillRect(
-    node.coords[0],
-    node.coords[1],
+    node.x,
+    node.y,
     1,
     1,
   );
@@ -30,11 +30,11 @@ export const drawRect = (node, ctx, opts) => {
   );
 };
 
-export const drawLine = (from, to, ctx, highlightLevel) => {
+export const drawLine = (fromNode, toNode, ctx, highlightLevel) => {
   ctx.strokeStyle = lineStyle[highlightLevel];
   ctx.beginPath();
-  ctx.moveTo(from.coords[0], from.coords[1]);
-  ctx.lineTo(to.coords[0], to.coords[1]);
+  ctx.moveTo(fromNode.x, fromNode.y);
+  ctx.lineTo(toNode.x, toNode.y);
   ctx.closePath();
   ctx.stroke();
 };

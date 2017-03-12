@@ -15,7 +15,8 @@ import {
 
 class Node {
   constructor(opts) {
-    this.coords = [opts.x, opts.y];
+    this.x = opts.x;
+    this.y = opts.y;
     this.row = opts.row;
     this.col = opts.col;
     this.siblings = [];
@@ -45,6 +46,14 @@ class Node {
   setHighlightLevel(newLevel) {
     this.highlightLevel = newLevel;
   }
+
+  setX(newX) {
+    this.x = newX;
+  }
+
+  setY(newY) {
+    this.y = newY;
+  }
 }
 
 export const connectNodes = (nodes, opts) => {
@@ -70,22 +79,22 @@ export const connectNodes = (nodes, opts) => {
 };
 
 export const checkIfNodeShouldChangeDir = (node) => {
-  if (node.coords[0] === node.minX || node.coords[0] === node.maxX) {
+  if (node.x === node.minX || node.x === node.maxX) {
     return true;
-  } else if (node.coords[1] === node.minY || node.coords[1] === node.maxY) {
+  } else if (node.y === node.minY || node.y === node.maxY) {
     return true;
   }
   return false;
 };
 
 export const getDirExcludes = (node) => {
-  if (node.coords[0] === node.minX) {
+  if (node.x === node.minX) {
     return [LEFT, UP, DOWN, UP_LEFT, DOWN_LEFT];
-  } else if (node.coords[0] === node.maxX) {
+  } else if (node.x === node.maxX) {
     return [RIGHT, UP, DOWN, UP_RIGHT, DOWN_RIGHT];
-  } else if (node.coords[1] === node.minY) {
+  } else if (node.y === node.minY) {
     return [LEFT, UP, RIGHT, UP_LEFT, UP_RIGHT];
-  } else if (node.coords[1] === node.maxY) {
+  } else if (node.y === node.maxY) {
     return [LEFT, DOWN, RIGHT, DOWN_LEFT, DOWN_RIGHT];
   }
 
