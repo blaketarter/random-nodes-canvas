@@ -4,8 +4,8 @@ const mouse = {
 };
 
 export const setMouseCoords = (e) => {
-  mouse.x = e.pageX;
-  mouse.y = e.pageY;
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
 };
 
 export const getMouseCoords = () => ({

@@ -10,8 +10,8 @@ var mouse = {
 };
 
 var setMouseCoords = function setMouseCoords(e) {
-  mouse.x = e.pageX;
-  mouse.y = e.pageY;
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
 };
 
 var getMouseCoords = function getMouseCoords() {
@@ -469,9 +469,10 @@ function startRender(_ref) {
     cellSize: cellSize
   });
 
-  document.onmousemove = setMouseCoords;
   var canvas = canvasElement;
   var ctx = canvas.getContext('2d');
+
+  canvas.onmousemove = setMouseCoords;
 
   canvas.width = opts.maxX;
   canvas.height = opts.maxY;
@@ -500,6 +501,10 @@ var RandomNodes = function () {
     this.canvasElement = canvasElement;
     this.beforeRender = beforeRender;
     this.afterRender = afterRender;
+
+    if (!(this.canvasElement instanceof HTMLCanvasElement)) {
+      console.error('canvasElement needs to be of type "HTMLCanvasElement"');
+    }
   }
 
   createClass(RandomNodes, [{

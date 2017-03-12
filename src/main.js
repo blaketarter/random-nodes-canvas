@@ -36,9 +36,10 @@ function startRender({
     cellSize,
   });
 
-  document.onmousemove = setMouseCoords;
   const canvas = canvasElement;
   const ctx = canvas.getContext('2d');
+
+  canvas.onmousemove = setMouseCoords;
 
   canvas.width = opts.maxX;
   canvas.height = opts.maxY;
@@ -64,6 +65,10 @@ class RandomNodes {
     this.canvasElement = canvasElement;
     this.beforeRender = beforeRender;
     this.afterRender = afterRender;
+
+    if (!(this.canvasElement instanceof HTMLCanvasElement)) {
+      console.error('canvasElement needs to be of type "HTMLCanvasElement"');
+    }
   }
 
   start() {

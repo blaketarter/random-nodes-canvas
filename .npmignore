@@ -2,7 +2,7 @@ node_modules
 src
 example
 build.js
-.bablerc
+.babelrc
 .eslintrc
 .gitignore
 .npmignore

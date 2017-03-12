@@ -1,6 +1,6 @@
 {
   "name": "random-nodes-canvas",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Random nodes on a canvas",
   "main": "dist/bundle.js",
   "scripts": {
