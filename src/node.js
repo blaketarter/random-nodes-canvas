@@ -7,11 +7,11 @@ import {
   UP_RIGHT,
   DOWN_LEFT,
   DOWN_RIGHT,
-} from '../directions/index';
+} from './directions';
 
 import {
   getRandomBetween,
-} from '../utils/index';
+} from './utils';
 
 class Node {
   constructor(opts) {

@@ -1,6 +1,6 @@
 import {
   randomInArr,
-} from '../utils/index';
+} from './utils';
 
 export const UP = 'up';
 export const DOWN = 'down';

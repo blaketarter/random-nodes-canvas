@@ -1,16 +1,16 @@
 import {
   setMouseCoords,
-} from './mouse/index';
-import initOpts from './opts/index';
+} from './mouse';
+import initOpts from './opts';
 import generateNodes, {
   connectNodes,
-} from './node/index';
+} from './node';
 import {
   moveNodes,
-} from './move/index';
+} from './move';
 import {
   draw,
-} from './draw/index';
+} from './draw';
 
 function render(canvas, ctx, nodes, opts, beforeRender, afterRender) {
   beforeRender();

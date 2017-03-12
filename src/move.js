@@ -1,6 +1,6 @@
 import {
   clamp,
-} from '../utils/index';
+} from './utils';
 
 import {
   UP,
@@ -12,16 +12,16 @@ import {
   DOWN_LEFT,
   DOWN_RIGHT,
   getRandomDirection,
-} from '../directions/index';
+} from './directions';
 
 import {
   getMouseCoords,
-} from '../mouse/index';
+} from './mouse';
 
 import {
   checkIfNodeShouldChangeDir,
   getDirExcludes,
-} from '../node/index';
+} from './node';
 
 const moveBy = 0.05;
 const changeDirCountdown = 120;

@@ -1,6 +1,6 @@
 import {
   getMouseCoords,
-} from '../mouse/index';
+} from './mouse';
 
 const dotStyle = 'rgb(221, 221, 221)';
 const rectStyle = 'rgba(221, 221, 221, 0.2)';
