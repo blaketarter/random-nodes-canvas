@@ -3,8 +3,5 @@
     "browser": true,
     "node": true
   },
-  "extends": "airbnb",
-  "globals": {
-    "Stats": true
-  }
+  "extends": "airbnb"
 }
