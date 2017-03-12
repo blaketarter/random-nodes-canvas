@@ -7,7 +7,6 @@ import {
   UP_RIGHT,
   DOWN_LEFT,
   DOWN_RIGHT,
-  DIR_LIST,
 } from '../directions/index';
 
 import {
@@ -41,6 +40,10 @@ class Node {
 
   setDir(dir) {
     this.dir = dir;
+  }
+
+  setHighlightLevel(newLevel) {
+    this.highlightLevel = newLevel;
   }
 }
 
@@ -92,11 +95,11 @@ export const getDirExcludes = (node) => {
 export default function generateNodes(opts) {
   const nodes = [];
 
-  for (let y = 1, yy = opts.yBlocks; y <= yy; y++) {
+  for (let y = 1, yy = opts.yBlocks; y <= yy; y += 1) {
     const ySpacing = (y === yy) ? opts.endSizeY : opts.spacing;
     const minY = (y - 1) * opts.spacing;
 
-    for (let x = 1, xx = opts.xBlocks; x <= xx; x++) {
+    for (let x = 1, xx = opts.xBlocks; x <= xx; x += 1) {
       const xSpacing = (x === xx) ? opts.endSizeX : opts.spacing;
       const minX = (x - 1) * opts.spacing;
 

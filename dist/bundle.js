@@ -4,18 +4,6 @@
 	(factory());
 }(this, (function () { 'use strict';
 
-var clamp = function clamp(input, min, max) {
-  return Math.min(Math.max(input, min), max);
-};
-
-var randomInArr = function randomInArr(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-};
-
-var getRandomBetween = function getRandomBetween(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-};
-
 var mouse = {
   x: null,
   y: null
@@ -31,25 +19,6 @@ var getMouseCoords = function getMouseCoords() {
     x: mouse.x,
     y: mouse.y
   };
-};
-
-var UP = 'up';
-var DOWN = 'down';
-var LEFT = 'left';
-var RIGHT = 'right';
-
-var UP_LEFT = 'up_left';
-var UP_RIGHT = 'up_right';
-var DOWN_LEFT = 'down_left';
-var DOWN_RIGHT = 'down_right';
-
-var DIR_LIST = [UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT];
-
-var getRandomDirection = function getRandomDirection(node) {
-  var dirsMinusExcludes = DIR_LIST.filter(function (dir) {
-    return node.dirExcludes.indexOf(dir) < 0;
-  });
-  return randomInArr(dirsMinusExcludes);
 };
 
 function initOpts(_ref) {
@@ -76,6 +45,37 @@ function initOpts(_ref) {
     blocks: blocks
   };
 }
+
+var clamp = function clamp(input, min, max) {
+  return Math.min(Math.max(input, min), max);
+};
+
+var randomInArr = function randomInArr(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+};
+
+var getRandomBetween = function getRandomBetween(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+var UP = 'up';
+var DOWN = 'down';
+var LEFT = 'left';
+var RIGHT = 'right';
+
+var UP_LEFT = 'up_left';
+var UP_RIGHT = 'up_right';
+var DOWN_LEFT = 'down_left';
+var DOWN_RIGHT = 'down_right';
+
+var DIR_LIST = [UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT];
+
+var getRandomDirection = function getRandomDirection(node) {
+  var dirsMinusExcludes = DIR_LIST.filter(function (dir) {
+    return node.dirExcludes.indexOf(dir) < 0;
+  });
+  return randomInArr(dirsMinusExcludes);
+};
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -113,6 +113,11 @@ var Node = function () {
     key: 'setDir',
     value: function setDir(dir) {
       this.dir = dir;
+    }
+  }, {
+    key: 'setHighlightLevel',
+    value: function setHighlightLevel(newLevel) {
+      this.highlightLevel = newLevel;
     }
   }]);
 
@@ -171,11 +176,11 @@ var getDirExcludes = function getDirExcludes(node) {
 function generateNodes(opts) {
   var nodes = [];
 
-  for (var y = 1, yy = opts.yBlocks; y <= yy; y++) {
+  for (var y = 1, yy = opts.yBlocks; y <= yy; y += 1) {
     var ySpacing = y === yy ? opts.endSizeY : opts.spacing;
     var minY = (y - 1) * opts.spacing;
 
-    for (var x = 1, xx = opts.xBlocks; x <= xx; x++) {
+    for (var x = 1, xx = opts.xBlocks; x <= xx; x += 1) {
       var xSpacing = x === xx ? opts.endSizeX : opts.spacing;
       var minX = (x - 1) * opts.spacing;
 
@@ -276,6 +281,8 @@ var moveNodeDirSwitch = function moveNodeDirSwitch(node, dir) {
       node.setDir(DOWN_RIGHT);
       node = moveNodeDownRight(node);
       break;
+    default:
+      console.warn('should not get to this default case');
   }
 
   return node;
@@ -327,7 +334,7 @@ var moveTowardsMouse = function moveTowardsMouse(node, mouse) {
 };
 
 var moveNodes = function moveNodes(nodes) {
-  return nodes.map(function (node, index) {
+  return nodes.map(function (node) {
     if (node.highlightLevel === 0) {
       return moveDirectionRandomlyBy(node);
     }
@@ -370,15 +377,15 @@ var getHighlightedNode = function getHighlightedNode(nodes, mouse) {
   nodes.forEach(function (node) {
     if (node.minX <= mouse.x && mouse.x <= node.maxX && node.minY <= mouse.y && mouse.y <= node.maxY) {
       highlightedNode = node;
-      node.highlightLevel = 2;
+      node.setHighlightLevel(2);
     } else {
-      node.highlightLevel = 0;
+      node.setHighlightLevel(0);
     }
   });
 
   if (highlightedNode) {
     highlightedNode.siblings.forEach(function (node) {
-      node.highlightLevel = 1;
+      node.setHighlightLevel(1);
     });
   }
 };
@@ -399,6 +406,17 @@ var draw = function draw(canvas, ctx, nodes, opts) {
 // make everything non mutating (as much as possible)
 // pure funtions
 // optimize
+
+function render(canvas, ctx, nodes, opts, stats) {
+  stats.begin();
+  draw(canvas, ctx, nodes, opts);
+  stats.end();
+
+  var newNodes = moveNodes(nodes);
+  window.requestAnimationFrame(function () {
+    return render(canvas, ctx, newNodes, opts, stats);
+  });
+}
 
 function startRender() {
   var opts = initOpts({
@@ -422,17 +440,6 @@ function startRender() {
   nodes = connectNodes(nodes, opts);
 
   render(canvas, ctx, nodes, opts, stats);
-}
-
-function render(canvas, ctx, nodes, opts, stats) {
-  stats.begin();
-  draw(canvas, ctx, nodes, opts);
-  stats.end();
-
-  var newNodes = moveNodes(nodes);
-  window.requestAnimationFrame(function () {
-    return render(canvas, ctx, newNodes, opts, stats);
-  });
 }
 
 window.onload = startRender;

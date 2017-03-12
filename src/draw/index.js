@@ -53,15 +53,15 @@ export const getHighlightedNode = (nodes, mouse) => {
       (node.minY <= mouse.y && mouse.y <= node.maxY)
     ) {
       highlightedNode = node;
-      node.highlightLevel = 2;
+      node.setHighlightLevel(2);
     } else {
-      node.highlightLevel = 0;
+      node.setHighlightLevel(0);
     }
   });
 
   if (highlightedNode) {
     highlightedNode.siblings.forEach((node) => {
-      node.highlightLevel = 1;
+      node.setHighlightLevel(1);
     });
   }
 };

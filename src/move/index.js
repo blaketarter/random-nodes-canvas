@@ -11,7 +11,6 @@ import {
   UP_RIGHT,
   DOWN_LEFT,
   DOWN_RIGHT,
-  DIR_LIST,
   getRandomDirection,
 } from '../directions/index';
 
@@ -105,6 +104,8 @@ const moveNodeDirSwitch = (node, dir) => {
       node.setDir(DOWN_RIGHT);
       node = moveNodeDownRight(node);
       break;
+    default:
+      console.warn('should not get to this default case');
   }
 
   return node;
@@ -155,7 +156,7 @@ export const moveTowardsMouse = (node, mouse) => {
   return node;
 };
 
-export const moveNodes = nodes => nodes.map((node, index) => {
+export const moveNodes = nodes => nodes.map((node) => {
   if (node.highlightLevel === 0) {
     return moveDirectionRandomlyBy(node);
   }
