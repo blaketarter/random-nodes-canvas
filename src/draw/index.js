@@ -11,7 +11,9 @@ const lineStyle = {
 };
 
 export const drawNode = (node, ctx) => {
+  /* eslint-disable */
   ctx.fillStyle = dotStyle;
+  /* eslint-enable */
   ctx.fillRect(
     node.x,
     node.y,
@@ -21,7 +23,9 @@ export const drawNode = (node, ctx) => {
 };
 
 export const drawRect = (node, ctx, opts) => {
+  /* eslint-disable */
   ctx.strokeStyle = rectStyle;
+  /* eslint-enable */
   ctx.strokeRect(
     (node.col - 1) * opts.spacing,
     (node.row - 1) * opts.spacing,
@@ -31,7 +35,9 @@ export const drawRect = (node, ctx, opts) => {
 };
 
 export const drawLine = (fromNode, toNode, ctx, highlightLevel) => {
+  /* eslint-disable */
   ctx.strokeStyle = lineStyle[highlightLevel];
+  /* eslint-enable */
   ctx.beginPath();
   ctx.moveTo(fromNode.x, fromNode.y);
   ctx.lineTo(toNode.x, toNode.y);

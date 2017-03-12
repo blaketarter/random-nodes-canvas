@@ -116,6 +116,11 @@ var Node = function () {
       this.dir = dir;
     }
   }, {
+    key: 'setDirExcludes',
+    value: function setDirExcludes(excludes) {
+      this.dirExcludes = excludes;
+    }
+  }, {
     key: 'setHighlightLevel',
     value: function setHighlightLevel(newLevel) {
       this.highlightLevel = newLevel;
@@ -129,6 +134,16 @@ var Node = function () {
     key: 'setY',
     value: function setY(newY) {
       this.y = newY;
+    }
+  }, {
+    key: 'setShouldChangeDir',
+    value: function setShouldChangeDir(shouldChange) {
+      this.shouldChangeDir = shouldChange;
+    }
+  }, {
+    key: 'setDirCountdown',
+    value: function setDirCountdown(newCount) {
+      this.changeDirCountdown = newCount;
     }
   }]);
 
@@ -285,10 +300,9 @@ var moveNodeDirSwitch = function moveNodeDirSwitch(node, dir) {
       moveNodeDownRight(node);
       break;
     default:
-      console.warn('should not get to this default case');
+      node.setDir(DOWN_LEFT);
+      moveNodeDownLeft(node);
   }
-
-  return node;
 };
 
 var moveDirectionRandomlyBy = function moveDirectionRandomlyBy(node) {
@@ -297,23 +311,23 @@ var moveDirectionRandomlyBy = function moveDirectionRandomlyBy(node) {
 
     if (node.shouldChangeDir) {
       dir = getRandomDirection(node);
-      node.shouldChangeDir = false;
+      node.setShouldChangeDir(false);
     } else {
       dir = getRandomDirection(node);
     }
 
-    node.changeDirCountdown = changeDirCountdown;
+    node.setDirCountdown(changeDirCountdown);
 
-    node = moveNodeDirSwitch(node, dir);
+    moveNodeDirSwitch(node, dir);
   } else {
-    node = moveNodeDirSwitch(node, node.dir);
-    node.changeDirCountdown -= 1;
-    node.shouldChangeDir = checkIfNodeShouldChangeDir(node);
+    moveNodeDirSwitch(node, node.dir);
+    node.setDirCountdown(node.changeDirCountdown - 1);
+    node.setShouldChangeDir(checkIfNodeShouldChangeDir(node));
 
     if (node.shouldChangeDir) {
-      node.dirExcludes = getDirExcludes(node);
+      node.setDirExcludes(getDirExcludes(node));
     } else {
-      node.dirExcludes = [];
+      node.setDirExcludes([]);
     }
   }
 
@@ -353,14 +367,18 @@ var lineStyle = {
 };
 
 var drawNode = function drawNode(node, ctx) {
+  /* eslint-disable */
   ctx.fillStyle = dotStyle;
+  /* eslint-enable */
   ctx.fillRect(node.x, node.y, 1, 1);
 };
 
 
 
 var drawLine = function drawLine(fromNode, toNode, ctx, highlightLevel) {
+  /* eslint-disable */
   ctx.strokeStyle = lineStyle[highlightLevel];
+  /* eslint-enable */
   ctx.beginPath();
   ctx.moveTo(fromNode.x, fromNode.y);
   ctx.lineTo(toNode.x, toNode.y);

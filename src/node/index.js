@@ -43,6 +43,10 @@ class Node {
     this.dir = dir;
   }
 
+  setDirExcludes(excludes) {
+    this.dirExcludes = excludes;
+  }
+
   setHighlightLevel(newLevel) {
     this.highlightLevel = newLevel;
   }
@@ -53,6 +57,14 @@ class Node {
 
   setY(newY) {
     this.y = newY;
+  }
+
+  setShouldChangeDir(shouldChange) {
+    this.shouldChangeDir = shouldChange;
+  }
+
+  setDirCountdown(newCount) {
+    this.changeDirCountdown = newCount;
   }
 }
 

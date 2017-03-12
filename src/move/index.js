@@ -97,10 +97,9 @@ const moveNodeDirSwitch = (node, dir) => {
       moveNodeDownRight(node);
       break;
     default:
-      console.warn('should not get to this default case');
+      node.setDir(DOWN_LEFT);
+      moveNodeDownLeft(node);
   }
-
-  return node;
 };
 
 export const moveDirectionRandomlyBy = (node) => {
@@ -109,23 +108,23 @@ export const moveDirectionRandomlyBy = (node) => {
 
     if (node.shouldChangeDir) {
       dir = getRandomDirection(node);
-      node.shouldChangeDir = false;
+      node.setShouldChangeDir(false);
     } else {
       dir = getRandomDirection(node);
     }
 
-    node.changeDirCountdown = changeDirCountdown;
+    node.setDirCountdown(changeDirCountdown);
 
-    node = moveNodeDirSwitch(node, dir);
+    moveNodeDirSwitch(node, dir);
   } else {
-    node = moveNodeDirSwitch(node, node.dir);
-    node.changeDirCountdown -= 1;
-    node.shouldChangeDir = checkIfNodeShouldChangeDir(node);
+    moveNodeDirSwitch(node, node.dir);
+    node.setDirCountdown(node.changeDirCountdown - 1);
+    node.setShouldChangeDir(checkIfNodeShouldChangeDir(node));
 
     if (node.shouldChangeDir) {
-      node.dirExcludes = getDirExcludes(node);
+      node.setDirExcludes(getDirExcludes(node));
     } else {
-      node.dirExcludes = [];
+      node.setDirExcludes([]);
     }
   }
 
