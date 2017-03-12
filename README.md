@@ -1,1 +1,1 @@
-![Example](/examlpe/examlpe.png?raw=true "Example")
+![Example](/example/example.png?raw=true "Example")
