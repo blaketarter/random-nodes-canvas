@@ -1,5 +1,7 @@
 import {
   setMouseCoords,
+  onMouseEnter,
+  onMouseLeave,
 } from './mouse';
 import initOpts from './opts';
 import generateNodes, {
@@ -40,6 +42,8 @@ function startRender({
   const ctx = canvas.getContext('2d');
 
   canvas.onmousemove = setMouseCoords;
+  canvas.onmouseenter = onMouseEnter;
+  canvas.onmouseleave = onMouseLeave;
 
   canvas.width = opts.maxX;
   canvas.height = opts.maxY;

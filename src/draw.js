@@ -55,6 +55,7 @@ export const getHighlightedNode = (nodes, mouse) => {
 
   nodes.forEach((node) => {
     if (
+      mouse.isMouseOverCanvas &&
       (node.minX <= mouse.x && mouse.x <= node.maxX) &&
       (node.minY <= mouse.y && mouse.y <= node.maxY)
     ) {

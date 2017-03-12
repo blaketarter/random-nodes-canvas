@@ -6,19 +6,29 @@
 
 var mouse = {
   x: null,
-  y: null
+  y: null,
+  isMouseOverCanvas: false
 };
 
 var setMouseCoords = function setMouseCoords(e) {
-  mouse.x = e.clientX;
-  mouse.y = e.clientY;
+  mouse.x = e.offsetX;
+  mouse.y = e.offsetY;
 };
 
 var getMouseCoords = function getMouseCoords() {
   return {
     x: mouse.x,
-    y: mouse.y
+    y: mouse.y,
+    isMouseOverCanvas: mouse.isMouseOverCanvas
   };
+};
+
+var onMouseEnter = function onMouseEnter() {
+  mouse.isMouseOverCanvas = true;
+};
+
+var onMouseLeave = function onMouseLeave() {
+  mouse.isMouseOverCanvas = false;
 };
 
 function initOpts(_ref) {
@@ -417,7 +427,7 @@ var getHighlightedNode = function getHighlightedNode(nodes, mouse) {
   var highlightedNode = void 0;
 
   nodes.forEach(function (node) {
-    if (node.minX <= mouse.x && mouse.x <= node.maxX && node.minY <= mouse.y && mouse.y <= node.maxY) {
+    if (mouse.isMouseOverCanvas && node.minX <= mouse.x && mouse.x <= node.maxX && node.minY <= mouse.y && mouse.y <= node.maxY) {
       highlightedNode = node;
       node.setHighlightLevel(2);
     } else {
@@ -473,6 +483,8 @@ function startRender(_ref) {
   var ctx = canvas.getContext('2d');
 
   canvas.onmousemove = setMouseCoords;
+  canvas.onmouseenter = onMouseEnter;
+  canvas.onmouseleave = onMouseLeave;
 
   canvas.width = opts.maxX;
   canvas.height = opts.maxY;
