@@ -28,81 +28,73 @@ const changeDirCountdown = 120;
 
 export const moveNodeUpBy = (node) => {
   node.setY(clamp(node.y - moveBy, node.minY, node.maxY));
-  return node;
 };
 
 export const moveNodeDownBy = (node) => {
   node.setY(clamp(node.y + moveBy, node.minY, node.maxY));
-  return node;
 };
 
 export const moveNodeRightBy = (node) => {
   node.setX(clamp(node.x + moveBy, node.minX, node.maxX));
-  return node;
 };
 
 export const moveNodeLeftBy = (node) => {
   node.setX(clamp(node.x - moveBy, node.minX, node.maxX));
-  return node;
 };
 
 export const moveNodeUpLeft = (node) => {
-  node = moveNodeUpBy(node);
-  node = moveNodeLeftBy(node);
-  return node;
+  moveNodeUpBy(node);
+  moveNodeLeftBy(node);
 };
 
 export const moveNodeUpRight = (node) => {
-  node = moveNodeUpBy(node);
-  node = moveNodeRightBy(node);
-  return node;
+  moveNodeUpBy(node);
+  moveNodeRightBy(node);
 };
 
 export const moveNodeDownLeft = (node) => {
-  node = moveNodeDownBy(node);
-  node = moveNodeLeftBy(node);
-  return node;
+  moveNodeDownBy(node);
+  moveNodeLeftBy(node);
 };
 
 export const moveNodeDownRight = (node) => {
-  node = moveNodeDownBy(node);
-  node = moveNodeRightBy(node);
-  return node;
+  moveNodeDownBy(node);
+  moveNodeRightBy(node);
 };
 
 const moveNodeDirSwitch = (node, dir) => {
   switch (dir) {
     case UP:
       node.setDir(UP);
-      node = moveNodeUpBy(node);
+      moveNodeUpBy(node);
       break;
     case DOWN:
       node.setDir(DOWN);
-      node = moveNodeDownBy(node);
+      moveNodeDownBy(node);
       break;
     case LEFT:
       node.setDir(LEFT);
-      node = moveNodeLeftBy(node);
+      moveNodeLeftBy(node);
       break;
     case RIGHT:
       node.setDir(RIGHT);
-      node = moveNodeRightBy(node);
+      moveNodeRightBy(node);
       break;
     case UP_LEFT:
       node.setDir(UP_LEFT);
-      node = moveNodeUpLeft(node);
+      moveNodeUpLeft(node);
       break;
     case UP_RIGHT:
       node.setDir(UP_RIGHT);
-      node = moveNodeUpRight(node);
+      moveNodeUpRight(node);
       break;
     case DOWN_LEFT:
       node.setDir(DOWN_LEFT);
-      node = moveNodeDownLeft(node);
+      moveNodeDownLeft(node);
       break;
     case DOWN_RIGHT:
       node.setDir(DOWN_RIGHT);
-      node = moveNodeDownRight(node);
+      moveNodeDownRight(node);
       break;
     default:
       console.warn('should not get to this default case');
@@ -142,15 +134,15 @@ export const moveDirectionRandomlyBy = (node) => {
 
 export const moveTowardsMouse = (node, mouse) => {
   if (node.x > mouse.x) {
-    node = moveNodeLeftBy(node);
+    moveNodeLeftBy(node);
   } else if (node.x < mouse.x) {
-    node = moveNodeRightBy(node);
+    moveNodeRightBy(node);
   }
 
   if (node.y > mouse.y) {
-    node = moveNodeUpBy(node);
+    moveNodeUpBy(node);
   } else if (node.y < mouse.y) {
-    node = moveNodeDownBy(node);
+    moveNodeDownBy(node);
   }
 
   return node;

@@ -216,81 +216,73 @@ var changeDirCountdown = 120;
 
 var moveNodeUpBy = function moveNodeUpBy(node) {
   node.setY(clamp(node.y - moveBy, node.minY, node.maxY));
-  return node;
 };
 
 var moveNodeDownBy = function moveNodeDownBy(node) {
   node.setY(clamp(node.y + moveBy, node.minY, node.maxY));
-  return node;
 };
 
 var moveNodeRightBy = function moveNodeRightBy(node) {
   node.setX(clamp(node.x + moveBy, node.minX, node.maxX));
-  return node;
 };
 
 var moveNodeLeftBy = function moveNodeLeftBy(node) {
   node.setX(clamp(node.x - moveBy, node.minX, node.maxX));
-  return node;
 };
 
 var moveNodeUpLeft = function moveNodeUpLeft(node) {
-  node = moveNodeUpBy(node);
-  node = moveNodeLeftBy(node);
-  return node;
+  moveNodeUpBy(node);
+  moveNodeLeftBy(node);
 };
 
 var moveNodeUpRight = function moveNodeUpRight(node) {
-  node = moveNodeUpBy(node);
-  node = moveNodeRightBy(node);
-  return node;
+  moveNodeUpBy(node);
+  moveNodeRightBy(node);
 };
 
 var moveNodeDownLeft = function moveNodeDownLeft(node) {
-  node = moveNodeDownBy(node);
-  node = moveNodeLeftBy(node);
-  return node;
+  moveNodeDownBy(node);
+  moveNodeLeftBy(node);
 };
 
 var moveNodeDownRight = function moveNodeDownRight(node) {
-  node = moveNodeDownBy(node);
-  node = moveNodeRightBy(node);
-  return node;
+  moveNodeDownBy(node);
+  moveNodeRightBy(node);
 };
 
 var moveNodeDirSwitch = function moveNodeDirSwitch(node, dir) {
   switch (dir) {
     case UP:
       node.setDir(UP);
-      node = moveNodeUpBy(node);
+      moveNodeUpBy(node);
       break;
     case DOWN:
       node.setDir(DOWN);
-      node = moveNodeDownBy(node);
+      moveNodeDownBy(node);
       break;
     case LEFT:
       node.setDir(LEFT);
-      node = moveNodeLeftBy(node);
+      moveNodeLeftBy(node);
       break;
     case RIGHT:
       node.setDir(RIGHT);
-      node = moveNodeRightBy(node);
+      moveNodeRightBy(node);
       break;
     case UP_LEFT:
       node.setDir(UP_LEFT);
-      node = moveNodeUpLeft(node);
+      moveNodeUpLeft(node);
       break;
     case UP_RIGHT:
       node.setDir(UP_RIGHT);
-      node = moveNodeUpRight(node);
+      moveNodeUpRight(node);
       break;
     case DOWN_LEFT:
       node.setDir(DOWN_LEFT);
-      node = moveNodeDownLeft(node);
+      moveNodeDownLeft(node);
       break;
     case DOWN_RIGHT:
       node.setDir(DOWN_RIGHT);
-      node = moveNodeDownRight(node);
+      moveNodeDownRight(node);
       break;
     default:
       console.warn('should not get to this default case');
@@ -330,15 +322,15 @@ var moveDirectionRandomlyBy = function moveDirectionRandomlyBy(node) {
 
 var moveTowardsMouse = function moveTowardsMouse(node, mouse) {
   if (node.x > mouse.x) {
-    node = moveNodeLeftBy(node);
+    moveNodeLeftBy(node);
   } else if (node.x < mouse.x) {
-    node = moveNodeRightBy(node);
+    moveNodeRightBy(node);
   }
 
   if (node.y > mouse.y) {
-    node = moveNodeUpBy(node);
+    moveNodeUpBy(node);
   } else if (node.y < mouse.y) {
-    node = moveNodeDownBy(node);
+    moveNodeDownBy(node);
   }
 
   return node;
