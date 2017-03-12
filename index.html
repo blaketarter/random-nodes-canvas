@@ -10,5 +10,18 @@
   <body>
     <canvas id="graph"></canvas>
     <script src="dist/bundle.js"></script>
+    <script>
+      window.onload = function() {
+        var canvas = document.getElementById('graph');
+        var randomNodes = new RandomNodes({
+          height: window.innerHeight,
+          width: window.innerWidth,
+          cellSize: 50,
+          canvasElement: canvas,
+        });
+
+        randomNodes.start();
+      };
+    </script>
   </body>
 </html>

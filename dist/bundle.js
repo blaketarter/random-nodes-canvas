@@ -1,7 +1,7 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory() :
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
-	(factory());
+	(global.RandomNodes = factory());
 }(this, (function () { 'use strict';
 
 var mouse = {
@@ -23,9 +23,11 @@ var getMouseCoords = function getMouseCoords() {
 
 function initOpts(_ref) {
   var width = _ref.width,
-      height = _ref.height;
+      height = _ref.height,
+      _ref$cellSize = _ref.cellSize,
+      cellSize = _ref$cellSize === undefined ? 50 : _ref$cellSize;
 
-  var spacing = 50;
+  var spacing = cellSize;
   var maxX = width;
   var maxY = height;
   var xBlocks = Math.max(1, Math.ceil(maxX / spacing));
@@ -77,13 +79,33 @@ var getRandomDirection = function getRandomDirection(node) {
   return randomInArr(dirsMinusExcludes);
 };
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
 
 var Node = function () {
   function Node(opts) {
-    _classCallCheck(this, Node);
+    classCallCheck(this, Node);
 
     this.x = opts.x;
     this.y = opts.y;
@@ -105,7 +127,7 @@ var Node = function () {
     this.highlightLevel = 0;
   }
 
-  _createClass(Node, [{
+  createClass(Node, [{
     key: 'addSibling',
     value: function addSibling(node) {
       this.siblings.push(node);
@@ -146,7 +168,6 @@ var Node = function () {
       this.changeDirCountdown = newCount;
     }
   }]);
-
   return Node;
 }();
 
@@ -423,36 +444,34 @@ var draw = function draw(canvas, ctx, nodes, opts) {
   });
 };
 
-// todo
-// make everything non mutating (as much as possible)
-// pure funtions
-// optimize
-
-function render(canvas, ctx, nodes, opts, stats) {
-  stats.begin();
+function render(canvas, ctx, nodes, opts, beforeRender, afterRender) {
+  beforeRender();
   draw(canvas, ctx, nodes, opts);
-  stats.end();
+  afterRender();
 
   var newNodes = moveNodes(nodes);
   window.requestAnimationFrame(function () {
-    return render(canvas, ctx, newNodes, opts, stats);
+    return render(canvas, ctx, newNodes, opts, beforeRender, afterRender);
   });
 }
 
-function startRender() {
+function startRender(_ref) {
+  var height = _ref.height,
+      width = _ref.width,
+      cellSize = _ref.cellSize,
+      canvasElement = _ref.canvasElement,
+      beforeRender = _ref.beforeRender,
+      afterRender = _ref.afterRender;
+
   var opts = initOpts({
-    height: window.innerHeight,
-    width: window.innerWidth
+    height: height,
+    width: width,
+    cellSize: cellSize
   });
 
-  var stats = new Stats();
-  stats.showPanel(0);
-
   document.onmousemove = setMouseCoords;
-  var canvas = document.getElementById('graph');
+  var canvas = canvasElement;
   var ctx = canvas.getContext('2d');
-
-  document.body.appendChild(stats.dom);
 
   canvas.width = opts.maxX;
   canvas.height = opts.maxY;
@@ -460,9 +479,45 @@ function startRender() {
   var nodes = generateNodes(opts);
   nodes = connectNodes(nodes, opts);
 
-  render(canvas, ctx, nodes, opts, stats);
+  render(canvas, ctx, nodes, opts, beforeRender, afterRender);
 }
 
-window.onload = startRender;
+var RandomNodes = function () {
+  function RandomNodes(_ref2) {
+    var height = _ref2.height,
+        width = _ref2.width,
+        cellSize = _ref2.cellSize,
+        _ref2$beforeRender = _ref2.beforeRender,
+        beforeRender = _ref2$beforeRender === undefined ? function () {} : _ref2$beforeRender,
+        _ref2$afterRender = _ref2.afterRender,
+        afterRender = _ref2$afterRender === undefined ? function () {} : _ref2$afterRender,
+        canvasElement = _ref2.canvasElement;
+    classCallCheck(this, RandomNodes);
+
+    this.height = height;
+    this.width = width;
+    this.cellSize = cellSize;
+    this.canvasElement = canvasElement;
+    this.beforeRender = beforeRender;
+    this.afterRender = afterRender;
+  }
+
+  createClass(RandomNodes, [{
+    key: 'start',
+    value: function start() {
+      startRender({
+        height: this.height,
+        width: this.width,
+        cellSize: this.cellSize,
+        canvasElement: this.canvasElement,
+        beforeRender: this.beforeRender,
+        afterRender: this.afterRender
+      });
+    }
+  }]);
+  return RandomNodes;
+}();
+
+return RandomNodes;
 
 })));

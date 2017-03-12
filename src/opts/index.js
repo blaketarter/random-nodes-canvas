@@ -1,8 +1,9 @@
 export default function initOpts({
   width,
   height,
+  cellSize = 50,
 }) {
-  const spacing = 50;
+  const spacing = cellSize;
   const maxX = width;
   const maxY = height;
   const xBlocks = Math.max(1, Math.ceil(maxX / spacing));

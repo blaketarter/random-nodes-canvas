@@ -9,6 +9,7 @@ rollup.rollup({
 }).then(function (bundle) {
   bundle.write({
     dest: 'dist/bundle.js',
-    format: 'umd'
+    format: 'umd',
+    moduleName: 'RandomNodes'
   });
 });

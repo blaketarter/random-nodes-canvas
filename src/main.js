@@ -1,8 +1,3 @@
-// todo
-// make everything non mutating (as much as possible)
-// pure funtions
-// optimize
-
 import {
   setMouseCoords,
 } from './mouse/index';
@@ -17,29 +12,33 @@ import {
   draw,
 } from './draw/index';
 
-function render(canvas, ctx, nodes, opts, stats) {
-  stats.begin();
+function render(canvas, ctx, nodes, opts, beforeRender, afterRender) {
+  beforeRender();
   draw(canvas, ctx, nodes, opts);
-  stats.end();
+  afterRender();
 
   const newNodes = moveNodes(nodes);
-  window.requestAnimationFrame(() => render(canvas, ctx, newNodes, opts, stats));
+  window.requestAnimationFrame(() =>
+    render(canvas, ctx, newNodes, opts, beforeRender, afterRender));
 }
 
-function startRender() {
+function startRender({
+  height,
+  width,
+  cellSize,
+  canvasElement,
+  beforeRender,
+  afterRender,
+}) {
   const opts = initOpts({
-    height: window.innerHeight,
-    width: window.innerWidth,
+    height,
+    width,
+    cellSize,
   });
 
-  const stats = new Stats();
-  stats.showPanel(0);
-
   document.onmousemove = setMouseCoords;
-  const canvas = document.getElementById('graph');
+  const canvas = canvasElement;
   const ctx = canvas.getContext('2d');
-
-  document.body.appendChild(stats.dom);
 
   canvas.width = opts.maxX;
   canvas.height = opts.maxY;
@@ -47,7 +46,36 @@ function startRender() {
   let nodes = generateNodes(opts);
   nodes = connectNodes(nodes, opts);
 
-  render(canvas, ctx, nodes, opts, stats);
+  render(canvas, ctx, nodes, opts, beforeRender, afterRender);
 }
 
-window.onload = startRender;
+class RandomNodes {
+  constructor({
+    height,
+    width,
+    cellSize,
+    beforeRender = () => { },
+    afterRender = () => { },
+    canvasElement,
+  }) {
+    this.height = height;
+    this.width = width;
+    this.cellSize = cellSize;
+    this.canvasElement = canvasElement;
+    this.beforeRender = beforeRender;
+    this.afterRender = afterRender;
+  }
+
+  start() {
+    startRender({
+      height: this.height,
+      width: this.width,
+      cellSize: this.cellSize,
+      canvasElement: this.canvasElement,
+      beforeRender: this.beforeRender,
+      afterRender: this.afterRender,
+    });
+  }
+}
+
+export default RandomNodes;
